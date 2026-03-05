@@ -1,12 +1,13 @@
 import os
 import uuid
 from dotenv import load_dotenv
+from document_loader import smart_load
 from langchain_groq import ChatGroq
 from langchain.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyPDFLoader
+
 from langchain_community.cache import InMemoryCache
 import langchain
 from sentence_transformers import CrossEncoder
@@ -27,10 +28,8 @@ reranker = CrossEncoder(
     device="cuda"
 )
 
-def getvectorstore(pdf_path):
-    
-    loader = PyPDFLoader(pdf_path)
-    docs = loader.load()
+def getvectorstore(file_path):
+    docs = smart_load(file_path)
     
     # Better chunk settings: smaller chunks for better precision, better overlap
     splitter = RecursiveCharacterTextSplitter(
@@ -71,7 +70,7 @@ def getvectorstore(pdf_path):
         retrievers=[bm25,vector_retriever],
         weights=[0.5,0.5]
     )
-    return ensemble_retriever
+    return ensemble_retriever,"Document"
 
 def rerank_docs(query,docs,top_k=4):
     pairs = [(query,d.page_content)for d in docs]
@@ -92,4 +91,19 @@ Rewritten query:
 """
     return llm.invoke(prompt).content.strip()
 
+def rewrite_with_history(query,messages):
+    history = ""
+    for m in messages[-4:]:
+        history += f"{m['role']}: {m['content']}\n"
+    prompt = f"""You are helping a retrieval system understand follow-up questions.
 
+Conversation history:
+{history}
+
+Current question:
+{query}
+
+Rewrite the question so it becomes a complete standalone question.
+Return ONLY the rewritten question.
+"""
+    return llm.invoke(prompt).content.strip()
