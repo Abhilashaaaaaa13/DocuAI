@@ -1,0 +1,18 @@
+langchain==0.3.0
+langchain-groq
+langchain-community
+chromadb
+sentence-transformers
+pyvis
+networkx
+streamlit
+pypdf
+joblib
+python-dotenv
+langchain-huggingface
+torch 
+torchvision 
+torchaudio --index-url https://download.pytorch.org/whl/cu121
+langchain-experimental
+spacy
+spacy download en_core_web_sm
