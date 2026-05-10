@@ -32,4 +32,3 @@ pyvis==0.3.2
 
 sqlite-utils
 spacy==3.8.11
-en-core-web-sm
