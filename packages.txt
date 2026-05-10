@@ -1,1 +1,2 @@
 build-essential
+python-3.11
