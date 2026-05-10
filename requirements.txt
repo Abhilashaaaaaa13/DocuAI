@@ -31,4 +31,5 @@ networkx==3.4.2
 pyvis==0.3.2
 
 sqlite-utils
-python -m spacy download en_core_web_sm
+spacy==3.8.11
+en-core-web-sm
