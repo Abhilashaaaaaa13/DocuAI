@@ -27,12 +27,12 @@ llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0)
 
 embeddings = HuggingFaceEmbeddings(
     model_name="BAAI/bge-small-en-v1.5",
-    model_kwargs={"device": "cuda"}
+    model_kwargs={}
 )
 
 reranker = CrossEncoder(
     "cross-encoder/ms-marco-MiniLM-L-6-v2",
-    device="cuda"
+    device="cpu"
 )
 
 PERSIST_DIR    = "./chroma_db"
