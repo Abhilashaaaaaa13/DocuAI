@@ -28,7 +28,7 @@ load_dotenv()
 
 embeddings = HuggingFaceEmbeddings(
     model_name="BAAI/bge-small-en-v1.5",
-    model_kwargs={"device": "cuda"}
+    model_kwargs={}
 )
 llm      = ChatGroq(model="llama-3.1-8b-instant", temperature=0)
 ddg_tool = DuckDuckGoSearchResults(num_results=6)
